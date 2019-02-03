@@ -5,6 +5,14 @@ import (
 	"github.com/liserjrqlxue/simple-util"
 	"os"
 	"path"
+	"path/filepath"
+)
+
+// os
+var (
+	ex, _  = os.Executable()
+	exPath = filepath.Dir(ex)
+	pSep   = string(os.PathSeparator)
 )
 
 var (
@@ -20,13 +28,13 @@ var (
 	)
 	run1 = flag.String(
 		"run1",
-		"run.ExomeDepth.sh",
+		exPath+pSep+"run.ExomeDepth.sh",
 		"ExomeDepth script to run",
 	)
 	run2 = flag.String(
 		"run2",
 		"run.CNVkit.sh",
-		"CNVkit script to run",
+		exPath+pSep+"CNVkit script to run",
 	)
 )
 
