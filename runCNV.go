@@ -33,8 +33,8 @@ var (
 	)
 	run2 = flag.String(
 		"run2",
-		"run.CNVkit.sh",
-		exPath+pSep+"CNVkit script to run",
+		exPath+pSep+"run.CNVkit.sh",
+		"CNVkit script to run",
 	)
 )
 
