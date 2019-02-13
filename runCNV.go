@@ -6,6 +6,7 @@ import (
 	"github.com/liserjrqlxue/simple-util"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -99,13 +100,25 @@ func runExomeDepth(script, indir, outdir string, submit bool) {
 	simple_util.RunCmd("perl", args...)
 
 	var args2 []string
-	args2 = append(args2,
-		"-cwd",
-		"-l", "vf=31G,p=12",
-		"-P", "B2C_SGD",
-		"-N", "CNVkit."+tag,
-		outdir+"/CNVkit/run.sh",
-	)
+	sampleNum := len(simple_util.File2Array(strings.Join([]string{outdir, "ExomeDepth", "sample.list.checked"}, pSep)))
+	if sampleNum > 0 {
+		args2 = append(args2,
+			"-cwd",
+			"-l", "vf="+strconv.Itoa(sampleNum*2)+"G,p="+strconv.Itoa(sampleNum),
+			"-P", "B2C_SGD",
+			"-N", "ExomeDepth."+tag,
+			outdir+"/CNVkit/run.sh",
+		)
+	} else {
+		args2 = append(args2,
+			"-cwd",
+			"-l", "vf=31G,p=12",
+			"-P", "B2C_SGD",
+			"-N", "ExomeDepth."+tag,
+			outdir+"/CNVkit/run.sh",
+		)
+	}
+
 	if submit {
 		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
 		simple_util.RunCmd("qsub", args2...)
