@@ -6,15 +6,14 @@ import (
 	"github.com/liserjrqlxue/simple-util"
 	"os"
 	"path"
-	"path/filepath"
 	"strings"
 )
 
 // os
 var (
-	ex, _  = os.Executable()
-	exPath = filepath.Dir(ex)
-	pSep   = string(os.PathSeparator)
+	//ex, _  = os.Executable()
+	//exPath = filepath.Dir(ex)
+	pSep = string(os.PathSeparator)
 )
 
 var (
@@ -30,7 +29,7 @@ var (
 	)
 	run1 = flag.String(
 		"run1",
-		exPath+pSep+"run.ExomeDepth.sh",
+		"/share/backup/wangyaoshen/src/ExomeDepth/createScript.sgd.pl",
 		"ExomeDepth script to run",
 	)
 	run2 = flag.String(
