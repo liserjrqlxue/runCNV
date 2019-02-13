@@ -83,7 +83,7 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 		outdir+"/CNVkit/run.sh",
 	)
 	if submit {
-		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
+		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
 		simple_util.RunCmd("qsub", args2...)
 	} else {
 		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
@@ -120,7 +120,7 @@ func runExomeDepth(script, indir, outdir string, submit bool) {
 	}
 
 	if submit {
-		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
+		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
 		simple_util.RunCmd("qsub", args2...)
 	} else {
 		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
