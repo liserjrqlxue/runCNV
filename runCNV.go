@@ -60,7 +60,7 @@ func main() {
 		*outdir = path.Base(*indir)
 	}
 
-	simple_util.RunCmd(*run1, *indir, *outdir)
+	runExomeDepth(*run1, *indir, *outdir, *submit)
 	runCNVkit(*run2, *indir, *outdir, *CNVkitControl, *submit)
 }
 
@@ -83,8 +83,33 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 		outdir+"/CNVkit/run.sh",
 	)
 	if submit {
-		simple_util.RunCmd("qsub", args2...)
 		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
+		simple_util.RunCmd("qsub", args2...)
+	} else {
+		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
+	}
+}
+
+func runExomeDepth(script, indir, outdir string, submit bool) {
+	tag := path.Base(indir)
+	var args []string
+	args = append(args, script, indir)
+	args = append(args, strings.Join([]string{outdir, "ExomeDepth"}, pSep))
+	args = append(args, tag)
+	fmt.Printf("# perl %s\n", strings.Join(args, " "))
+	simple_util.RunCmd("perl", args...)
+
+	var args2 []string
+	args2 = append(args2,
+		"-cwd",
+		"-l", "vf=31G,p=12",
+		"-P", "B2C_SGD",
+		"-N", "CNVkit."+tag,
+		outdir+"/CNVkit/run.sh",
+	)
+	if submit {
+		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
+		simple_util.RunCmd("qsub", args2...)
 	} else {
 		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
 	}
