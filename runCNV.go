@@ -66,7 +66,8 @@ func main() {
 }
 
 func runCNVkit(script, indir, outdir, control string, submit bool) {
-	tag, _ := filepath.Abs(path.Base(indir))
+	tag, _ := filepath.Abs(indir)
+	tag = path.Base(tag)
 	var args []string
 	args = append(args, script)
 	args = append(args, strings.Join([]string{outdir, "ExomeDepth", "sample.list.checked"}, pSep))
@@ -92,8 +93,8 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 }
 
 func runExomeDepth(script, indir, outdir string, submit bool) {
-
-	tag, _ := filepath.Abs(path.Base(indir))
+	tag, _ := filepath.Abs(indir)
+	tag = path.Base(tag)
 	var args []string
 	args = append(args, script, indir)
 	args = append(args, strings.Join([]string{outdir, "ExomeDepth"}, pSep))
