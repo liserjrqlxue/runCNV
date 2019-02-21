@@ -6,6 +6,7 @@ import (
 	"github.com/liserjrqlxue/simple-util"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -65,7 +66,7 @@ func main() {
 }
 
 func runCNVkit(script, indir, outdir, control string, submit bool) {
-	tag := path.Base(indir)
+	tag, _ := filepath.Abs(path.Base(indir))
 	var args []string
 	args = append(args, script)
 	args = append(args, strings.Join([]string{outdir, "ExomeDepth", "sample.list.checked"}, pSep))
@@ -91,7 +92,8 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 }
 
 func runExomeDepth(script, indir, outdir string, submit bool) {
-	tag := path.Base(indir)
+
+	tag, _ := filepath.Abs(path.Base(indir))
 	var args []string
 	args = append(args, script, indir)
 	args = append(args, strings.Join([]string{outdir, "ExomeDepth"}, pSep))
@@ -107,7 +109,7 @@ func runExomeDepth(script, indir, outdir string, submit bool) {
 			"-l", "vf="+strconv.Itoa(sampleNum*2)+"G,p="+strconv.Itoa(sampleNum),
 			"-P", "B2C_SGD",
 			"-N", "ExomeDepth."+tag,
-			outdir+"/CNVkit/run.sh",
+			outdir+"/ExomeDepth/run.sh",
 		)
 	} else {
 		args2 = append(args2,
@@ -115,7 +117,7 @@ func runExomeDepth(script, indir, outdir string, submit bool) {
 			"-l", "vf=31G,p=12",
 			"-P", "B2C_SGD",
 			"-N", "ExomeDepth."+tag,
-			outdir+"/CNVkit/run.sh",
+			outdir+"/ExomeDepth/run.sh",
 		)
 	}
 
