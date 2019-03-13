@@ -31,7 +31,7 @@ var (
 	)
 	run1 = flag.String(
 		"run1",
-		"/share/backup/wangyaoshen/src/ExomeDepth/createScript.sgd.pl",
+		"/ifs7/B2C_SGD/PROJECT/PP12_Project/wangyaoshen/ExomeDepth/createScript.sgd.pl",
 		"ExomeDepth script to run",
 	)
 	run2 = flag.String(
