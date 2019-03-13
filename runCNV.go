@@ -49,6 +49,11 @@ var (
 		false,
 		"if auto submit",
 	)
+	maxThread = flag.Int(
+		"thread",
+		40,
+		"max thread limit, for parallel run and calculate memery usage",
+		)
 )
 
 func main() {
@@ -61,7 +66,7 @@ func main() {
 		*outdir = path.Base(*indir)
 	}
 
-	runExomeDepth(*run1, *indir, *outdir, *submit)
+	runExomeDepth(*run1, *indir, *outdir, *submit,*maxThread)
 	runCNVkit(*run2, *indir, *outdir, *CNVkitControl, *submit)
 }
 
@@ -92,11 +97,11 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 	}
 }
 
-func runExomeDepth(script, indir, outdir string, submit bool) {
+func runExomeDepth(script, indir, outdir string, submit bool,thread int) {
 	tag, _ := filepath.Abs(indir)
 	tag = path.Base(tag)
 	var args []string
-	args = append(args, script, indir)
+	args = append(args, script, strconv.Itoa(thread), indir)
 	args = append(args, strings.Join([]string{outdir, "ExomeDepth"}, pSep))
 	args = append(args, tag)
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
@@ -105,6 +110,9 @@ func runExomeDepth(script, indir, outdir string, submit bool) {
 	var args2 []string
 	sampleNum := len(simple_util.File2Array(strings.Join([]string{outdir, "ExomeDepth", "sample.list.checked"}, pSep)))
 	if sampleNum > 0 {
+		if sampleNum>thread{
+			sampleNum=thread
+		}
 		args2 = append(args2,
 			"-cwd",
 			"-l", "vf="+strconv.Itoa(sampleNum*2)+"G,p="+strconv.Itoa(sampleNum),
