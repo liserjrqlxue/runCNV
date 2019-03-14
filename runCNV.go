@@ -36,7 +36,7 @@ var (
 	)
 	run2 = flag.String(
 		"run2",
-		"/share/backup/hanrui/pipeline/CNVkit/bin/run_CNVkit.pl",
+		"/ifs9/BC_PS/hanrui/pipeline/CNVkit/bin/run_CNVkit.pl",
 		"CNVkit script to run",
 	)
 	CNVkitControl = flag.String(
