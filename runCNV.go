@@ -160,7 +160,6 @@ func runSMA(script, indir, outdir, geneInfo, control string, submit bool) {
 	var args []string
 	args = append(args, script, indir+pSep+"bam.list", geneInfo, control)
 	args = append(args, strings.Join([]string{outdir, "SMA"}, pSep))
-	args = append(args, tag)
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
 	simple_util.RunCmd("perl", args...)
 
