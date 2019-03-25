@@ -40,7 +40,7 @@ var (
 		"CNVkit script to run",
 	)
 	run3 = flag.String(
-		"run2",
+		"run3",
 		"/ifs7/B2C_SGD/PROJECT/PP12_Project/wangyaoshen/SMA_WES/run_SMN_CNV_v2.pl",
 		"SMA script to run",
 	)
