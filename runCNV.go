@@ -39,10 +39,20 @@ var (
 		"/share/backup/hanrui/pipeline/CNVkit/bin/run_CNVkit.pl",
 		"CNVkit script to run",
 	)
+	run3 = flag.String(
+		"run2",
+		"/ifs7/B2C_SGD/PROJECT/PP12_Project/wangyaoshen/SMA_WES/run_SMN_CNV_v2.pl",
+		"SMA script to run",
+	)
 	CNVkitControl = flag.String(
 		"control",
 		"/share/backup/hanrui/pipeline/CNVkit/control/MGISEQ_2000_control/201811/MGISEQ-2000_201811",
 		"control of CNVkit",
+	)
+	SMAControl = flag.String(
+		"smn",
+		"/ifs7/B2C_SGD/PROJECT/PP12_Project/ExomeDepth/workspace/SMA_WES/SMA_v2.txt.control_gene.csv",
+		"control of SMA",
 	)
 	submit = flag.Bool(
 		"submit",
@@ -53,7 +63,7 @@ var (
 		"thread",
 		40,
 		"max thread limit, for parallel run and calculate memery usage",
-		)
+	)
 )
 
 func main() {
@@ -66,8 +76,9 @@ func main() {
 		*outdir = path.Base(*indir)
 	}
 
-	runExomeDepth(*run1, *indir, *outdir, *submit,*maxThread)
+	runExomeDepth(*run1, *indir, *outdir, *submit, *maxThread)
 	runCNVkit(*run2, *indir, *outdir, *CNVkitControl, *submit)
+	runSMA(*run3, *indir, *outdir, *SMAControl, *submit)
 }
 
 func runCNVkit(script, indir, outdir, control string, submit bool) {
@@ -87,7 +98,7 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 		"-l", "vf=31G,p=12",
 		"-P", "B2C_SGD",
 		"-N", "CNVkit."+tag,
-		outdir+"/CNVkit/run.sh",
+		strings.Join([]string{outdir, "CNVkit", "run.sh"}, pSep),
 	)
 	if submit {
 		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
@@ -97,7 +108,7 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 	}
 }
 
-func runExomeDepth(script, indir, outdir string, submit bool,thread int) {
+func runExomeDepth(script, indir, outdir string, submit bool, thread int) {
 	tag, _ := filepath.Abs(indir)
 	tag = path.Base(tag)
 	var args []string
@@ -110,15 +121,15 @@ func runExomeDepth(script, indir, outdir string, submit bool,thread int) {
 	var args2 []string
 	sampleNum := len(simple_util.File2Array(strings.Join([]string{outdir, "ExomeDepth", "sample.list.checked"}, pSep)))
 	if sampleNum > 0 {
-		if sampleNum>thread{
-			sampleNum=thread
+		if sampleNum > thread {
+			sampleNum = thread
 		}
 		args2 = append(args2,
 			"-cwd",
 			"-l", "vf="+strconv.Itoa(sampleNum*2)+"G,p="+strconv.Itoa(sampleNum),
 			"-P", "B2C_SGD",
 			"-N", "ExomeDepth."+tag,
-			outdir+"/ExomeDepth/run.sh",
+			strings.Join([]string{outdir, "ExomeDepth", "run.sh"}, pSep),
 		)
 	} else {
 		args2 = append(args2,
@@ -126,9 +137,36 @@ func runExomeDepth(script, indir, outdir string, submit bool,thread int) {
 			"-l", "vf=31G,p=12",
 			"-P", "B2C_SGD",
 			"-N", "ExomeDepth."+tag,
-			outdir+"/ExomeDepth/run.sh",
+			strings.Join([]string{outdir, "ExomeDepth", "run.sh"}, pSep),
 		)
 	}
+
+	if submit {
+		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
+		simple_util.RunCmd("qsub", args2...)
+	} else {
+		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
+	}
+}
+
+func runSMA(script, indir, outdir, control string, submit bool) {
+	tag, _ := filepath.Abs(indir)
+	tag = path.Base(tag)
+	var args []string
+	args = append(args, script, indir+pSep+"bam.list", control)
+	args = append(args, strings.Join([]string{outdir, "SMA"}, pSep))
+	args = append(args, tag)
+	fmt.Printf("# perl %s\n", strings.Join(args, " "))
+	simple_util.RunCmd("perl", args...)
+
+	var args2 []string
+	args2 = append(args2,
+		"-cwd",
+		"-l", "vf=10G,p=10",
+		"-P", "B2C_SGD",
+		"-N", "SMA."+tag,
+		strings.Join([]string{outdir, "SMA", "run_SMN_CNV_v2.sh"}, pSep),
+	)
 
 	if submit {
 		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
