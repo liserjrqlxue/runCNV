@@ -54,6 +54,11 @@ var (
 		"/ifs7/B2C_SGD/PROJECT/PP12_Project/ExomeDepth/workspace/SMA_WES/SMA_v2.txt.control_gene.csv",
 		"control of SMA",
 	)
+	SMAGene = flag.String(
+		"geneinfo",
+		"/ifs9/BC_PS/hanrui/pipeline/SMA_WES/PP100.gene.info.bed",
+		"gene info for SMA",
+	)
 	submit = flag.Bool(
 		"submit",
 		false,
@@ -78,7 +83,7 @@ func main() {
 
 	runExomeDepth(*run1, *indir, *outdir, *submit, *maxThread)
 	runCNVkit(*run2, *indir, *outdir, *CNVkitControl, *submit)
-	runSMA(*run3, *indir, *outdir, *SMAControl, *submit)
+	runSMA(*run3, *indir, *outdir, *SMAGene, *SMAControl, *submit)
 }
 
 func runCNVkit(script, indir, outdir, control string, submit bool) {
@@ -149,11 +154,11 @@ func runExomeDepth(script, indir, outdir string, submit bool, thread int) {
 	}
 }
 
-func runSMA(script, indir, outdir, control string, submit bool) {
+func runSMA(script, indir, outdir, geneInfo, control string, submit bool) {
 	tag, _ := filepath.Abs(indir)
 	tag = path.Base(tag)
 	var args []string
-	args = append(args, script, indir+pSep+"bam.list", control)
+	args = append(args, script, indir+pSep+"bam.list", geneInfo, control)
 	args = append(args, strings.Join([]string{outdir, "SMA"}, pSep))
 	args = append(args, tag)
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
