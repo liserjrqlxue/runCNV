@@ -97,22 +97,7 @@ func runExomeDepth(script, sampleID, gender, bam, outdir, control string, submit
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
 	simple_util.RunCmd("perl", args...)
 
-	var args2 []string
-	args2 = append(
-		args2,
-		"-cwd",
-		"-l", "vf=2G,p=1",
-		"-P", "B2C_SGD",
-		"-N", tag+"."+sampleID,
-		strings.Join([]string{outdir, tag, sampleID, "run.sh"}, pSep),
-	)
-
-	if submit {
-		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
-		simple_util.RunCmd("qsub", args2...)
-	} else {
-		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
-	}
+	runSubmit(outdir, tag, sampleID, "2G", "1", submit)
 }
 
 func runCNVkit(script, control, outdir, sampleID, bam string, submit bool) {
@@ -122,22 +107,7 @@ func runCNVkit(script, control, outdir, sampleID, bam string, submit bool) {
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
 	simple_util.RunCmd("perl", args...)
 
-	var args2 []string
-	args2 = append(
-		args2,
-		"-cwd",
-		"-l", "vf=12G,p=12G",
-		"-P", "B2C_SGD",
-		"-N", tag+"."+sampleID,
-		strings.Join([]string{outdir, tag, sampleID, "run.sh"}, pSep),
-	)
-
-	if submit {
-		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
-		simple_util.RunCmd("qsub", args2...)
-	} else {
-		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
-	}
+	runSubmit(outdir, tag, sampleID, "12G", "10", submit)
 }
 
 func runSMA(script, bam, geneInfo, control, outdir, sampleID string, submit bool) {
@@ -147,11 +117,15 @@ func runSMA(script, bam, geneInfo, control, outdir, sampleID string, submit bool
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
 	simple_util.RunCmd("perl", args...)
 
+	runSubmit(outdir, tag, sampleID, "10G", "1", submit)
+}
+
+func runSubmit(outdir, tag, sampleID, vf, p string, submit bool) {
 	var args2 []string
 	args2 = append(
 		args2,
 		"-cwd",
-		"-l", "vf=10G,p=1",
+		"-l", "vf="+vf+",p="+p,
 		"-P", "B2C_SGD",
 		"-N", tag+"."+sampleID,
 		strings.Join([]string{outdir, tag, sampleID, "run.sh"}, pSep),
