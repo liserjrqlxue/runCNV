@@ -63,7 +63,7 @@ var (
 
 func main() {
 	flag.Parse()
-	if *sampleID == "" || *bam == "" {
+	if *sampleID == "" || *bam == "" || *gender == "" {
 		flag.Usage()
 		os.Exit(0)
 	}
