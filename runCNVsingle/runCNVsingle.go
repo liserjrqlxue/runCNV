@@ -143,7 +143,7 @@ func runCNVkit(script, control, outdir, sampleID, bam string, submit bool) {
 func runSMA(script, bam, geneInfo, control, outdir, sampleID string, submit bool) {
 	tag := "SMA"
 	var args []string
-	args = append(args, script, bam, geneInfo, control, outdir+pSep+tag)
+	args = append(args, script, bam, geneInfo, control, outdir+pSep+tag, sampleID)
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
 	simple_util.RunCmd("perl", args...)
 
