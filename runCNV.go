@@ -106,7 +106,7 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 		strings.Join([]string{outdir, "CNVkit", "run.sh"}, pSep),
 	)
 	if submit {
-		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
+		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
 		simple_util.RunCmd("qsub", args2...)
 	} else {
 		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
@@ -147,7 +147,7 @@ func runExomeDepth(script, indir, outdir string, submit bool, thread int) {
 	}
 
 	if submit {
-		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
+		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
 		simple_util.RunCmd("qsub", args2...)
 	} else {
 		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
@@ -173,7 +173,7 @@ func runSMA(script, indir, outdir, geneInfo, control string, submit bool) {
 	)
 
 	if submit {
-		fmt.Printf("# qsub %s\n# ", strings.Join(args2, " "))
+		fmt.Printf("# qsub %s\n", strings.Join(args2, " "))
 		simple_util.RunCmd("qsub", args2...)
 	} else {
 		fmt.Printf("# submit cmd:\nqsub %s\n", strings.Join(args2, " "))
