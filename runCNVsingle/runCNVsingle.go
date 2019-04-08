@@ -62,9 +62,11 @@ func main() {
 
 }
 
+// outdir/tag/sampleID/run.sh
 func runCNVkit(script, control, outdir, sampleID, bam string, submit bool) {
+	tag := "CNVkit"
 	var args []string
-	args = append(args, script, control, outdir, sampleID, bam)
+	args = append(args, script, control, outdir+pSep+tag, sampleID, bam)
 	fmt.Printf("# perl %s\n", strings.Join(args, " "))
 	simple_util.RunCmd("perl", args...)
 
@@ -75,7 +77,7 @@ func runCNVkit(script, control, outdir, sampleID, bam string, submit bool) {
 		"-l", "vf=12G,p=12G",
 		"-P", "B2C_SGD",
 		"-N", "CNVkit."+sampleID,
-		strings.Join([]string{outdir, "CNVkit", sampleID, "run.sh"}, pSep),
+		strings.Join([]string{outdir, tag, sampleID, "run.sh"}, pSep),
 	)
 
 	if submit {
