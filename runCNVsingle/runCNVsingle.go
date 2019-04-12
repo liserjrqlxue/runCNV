@@ -17,7 +17,7 @@ var (
 	outdir = flag.String(
 		"outdir",
 		"",
-		"output workdir, \nworkdir\n\tCNVtype\n\t\tSampleID",
+		"output workdir:\nworkdir\n\tCNVtype\n\t\tSampleID\n\t\t\trun.sh",
 	)
 	sampleID = flag.String(
 		"sampleID",
