@@ -56,7 +56,7 @@ var (
 	)
 	CNVkitControl = flag.String(
 		"control",
-		"/share/backup/hanrui/pipeline/CNVkit/control/MGISEQ_2000_control/201811/MGISEQ-2000_201811",
+		"/ifs9/B2C_SGD/PROJECT/MGISEQ-2000_Project/exome_diagnose/20190530_BGISEQ-50017SZ0001021_1022_1023_1024_39",
 		"control of CNVkit",
 	)
 	SMAControl = flag.String(
