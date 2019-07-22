@@ -69,6 +69,11 @@ var (
 		40,
 		"max thread limit, for parallel run and calculate memery usage",
 	)
+	proj = flag.String(
+		"proj",
+		"B2C_SGD",
+		"project of qsub -P",
+	)
 )
 
 func main() {
@@ -101,7 +106,7 @@ func runCNVkit(script, indir, outdir, control string, submit bool) {
 	args2 = append(args2,
 		"-cwd",
 		"-l", "vf=31G,p=12",
-		"-P", "B2C_SGD",
+		"-P", *proj,
 		"-N", "CNVkit."+tag,
 		strings.Join([]string{outdir, "CNVkit", "run.sh"}, pSep),
 	)
@@ -132,7 +137,7 @@ func runExomeDepth(script, indir, outdir string, submit bool, thread int) {
 		args2 = append(args2,
 			"-cwd",
 			"-l", "vf="+strconv.Itoa(sampleNum*2)+"G,p="+strconv.Itoa(sampleNum),
-			"-P", "B2C_SGD",
+			"-P", *proj,
 			"-N", "ExomeDepth."+tag,
 			strings.Join([]string{outdir, "ExomeDepth", "run.sh"}, pSep),
 		)
@@ -140,7 +145,7 @@ func runExomeDepth(script, indir, outdir string, submit bool, thread int) {
 		args2 = append(args2,
 			"-cwd",
 			"-l", "vf=31G,p=12",
-			"-P", "B2C_SGD",
+			"-P", *proj,
 			"-N", "ExomeDepth."+tag,
 			strings.Join([]string{outdir, "ExomeDepth", "run.sh"}, pSep),
 		)
@@ -169,7 +174,7 @@ func runSMA(script, indir, outdir, geneInfo, control string, submit bool) {
 	args2 = append(args2,
 		"-cwd",
 		"-l", "vf=10G,p=10",
-		"-P", "B2C_SGD",
+		"-P", *proj,
 		"-N", "SMA."+tag,
 		strings.Join([]string{outdir, "SMA", "run_SMN_CNV_v2.sh"}, pSep),
 	)
