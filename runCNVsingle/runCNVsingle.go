@@ -74,6 +74,11 @@ var (
 		false,
 		"if auto submit",
 	)
+	proj = flag.String(
+		"proj",
+		"B2C_SGD",
+		"project of qsub -P",
+	)
 )
 
 func main() {
@@ -126,7 +131,7 @@ func runSubmit(outdir, tag, sampleID, vf, p string, submit bool) {
 		args2,
 		"-cwd",
 		"-l", "vf="+vf+",p="+p,
-		"-P", "B2C_SGD",
+		"-P", *proj,
 		"-N", tag+"."+sampleID,
 		strings.Join([]string{outdir, tag, sampleID, "run.sh"}, pSep),
 	)
